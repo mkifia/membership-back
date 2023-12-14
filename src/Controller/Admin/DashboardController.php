@@ -2,6 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Address;
+use App\Entity\Fee;
+use App\Entity\Member;
+use App\Entity\Payment;
+use App\Entity\Team;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -13,7 +18,7 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        return parent::index();
+//        return parent::index();
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -29,18 +34,23 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        return $this->render('admin/dashboard.html.twig');
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Back');
+            ->renderContentMaximized()
+            ->setTitle('Membership Admin');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::linkToCrud('Fee', 'fas fa-bank', Fee::class);
+        yield MenuItem::linkToCrud('Team', 'fas fa-people-group', Team::class);
+        yield MenuItem::linkToCrud('Member', 'fas fa-user', Member::class);
+        yield MenuItem::linkToCrud('Payment', 'fas fa-credit-card', Payment::class);
+        yield MenuItem::linkToCrud('Address', 'fas fa-map-location-dot', Address::class);
     }
 }
