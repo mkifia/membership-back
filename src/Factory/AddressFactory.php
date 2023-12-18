@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Address;
 use App\Repository\AddressRepository;
+use JetBrains\PhpStorm\ArrayShape;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -26,13 +27,12 @@ use Zenstruck\Foundry\RepositoryProxy;
  * @method static Address[]|Proxy[]                 findBy(array $attributes)
  * @method static Address[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
  * @method static Address[]|Proxy[]                 randomSet(int $number, array $attributes = [])
+ *
  */
 final class AddressFactory extends ModelFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
      */
     public function __construct()
     {
@@ -41,15 +41,20 @@ final class AddressFactory extends ModelFactory
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
      */
-    protected function getDefaults(): array
+    #[ArrayShape([
+        'Country' => "string",
+        'postalCode' => "string",
+        'state' => "string",
+        'suffix' => "string",
+        'street' => "string"
+    ])] protected function getDefaults(): array
     {
         return [
             'Country' => self::faker()->country(),
             'postalCode' => self::faker()->postcode(),
-            'state' => self::faker()->text(32),
+            'state' => self::faker()->citySuffix(),
+            'suffix' => self::faker()->streetSuffix(),
             'street' => self::faker()->streetAddress(),
         ];
     }

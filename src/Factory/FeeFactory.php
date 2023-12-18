@@ -4,7 +4,6 @@ namespace App\Factory;
 
 use App\Entity\Fee;
 use App\Repository\FeeRepository;
-use JetBrains\PhpStorm\ArrayShape;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -45,12 +44,11 @@ final class FeeFactory extends ModelFactory
      *
      * @todo add your default values here
      */
-    #[ArrayShape(['amount' => "float", 'year' => "int"])]
     protected function getDefaults(): array
     {
         return [
-            'amount' => 50,
-            'year' => self::faker()->numberBetween(2007, 2024),
+            'amount' => self::faker()->randomFloat(),
+            'year' => self::faker()->randomNumber(),
         ];
     }
 

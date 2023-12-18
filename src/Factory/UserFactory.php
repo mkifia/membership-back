@@ -32,7 +32,6 @@ final class UserFactory extends ModelFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
      */
     public function __construct(private PasswordHasherFactoryInterface $passwordHasherFactory)
     {
@@ -47,9 +46,21 @@ final class UserFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
+            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'email' => self::faker()->email(),
-            'password' => $this->passwordHasherFactory->getPasswordHasher(User::class)->hash(self::faker()->password()),
+            'firstName' => self::faker()->firstName(),
+            'lastName' => self::faker()->lastName(),
+            'phone' => self::faker()->phoneNumber(),
+            'dateOfBirth' => self::faker()->dateTimeBetween('-80 years', 'now'),
+            'number' => self::faker()->slug(4, false),
+            'password' => $this->passwordHasherFactory
+                ->getPasswordHasher(User::class)->hash('Azerty1234!'),
             'roles' => ['ROLE_USER'],
+            'salt' => self::faker()->uuid(),
+            'team' => TeamFactory::random(),
+            'address' => AddressFactory::createOne(),
+            'payments' => PaymentFactory::createMany(5),
+            'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
 

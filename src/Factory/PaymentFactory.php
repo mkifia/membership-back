@@ -47,12 +47,11 @@ final class PaymentFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'amount' => self::faker()->randomNumber(2),
-            'comment' => self::faker()->text(),
+            'amount' => self::faker()->randomFloat(2, 0, 50),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'currency' => self::faker()->currencyCode(),
             'member' => MemberFactory::new(),
-            'method' => self::faker()->text(10),
+            'method' => self::faker()->randomElement(['card', 'cash', 'transfer']),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

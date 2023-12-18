@@ -48,8 +48,8 @@ final class TeamFactory extends ModelFactory
     {
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'name' => self::faker()->slug(4, false),
-            'number' => self::faker()->uuid(),
+            'name' => self::faker()->name(255),
+            'number' => self::faker()->slug(4, false),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

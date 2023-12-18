@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Member;
 use App\Repository\MemberRepository;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -31,10 +32,8 @@ final class MemberFactory extends ModelFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
      */
-    public function __construct()
+    public function __construct(private PasswordHasherFactoryInterface $passwordHasherFactory)
     {
         parent::__construct();
     }
@@ -47,15 +46,17 @@ final class MemberFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'address' => AddressFactory::new(),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'dateOfBirth' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'email' => self::faker()->email(),
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
-            'number' => self::faker()->uuid(),
             'phone' => self::faker()->phoneNumber(),
-            'team' => TeamFactory::new(),
+            'dateOfBirth' => self::faker()->dateTimeBetween('-80 years', 'now'),
+            'number' => self::faker()->slug(4, false),
+            'password' => $this->passwordHasherFactory
+                ->getPasswordHasher(Member::class)->hash('Azerty1234!'),
+            'roles' => ['ROLE_USER'],
+            'salt' => self::faker()->uuid(),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
