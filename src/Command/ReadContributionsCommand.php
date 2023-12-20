@@ -2,6 +2,12 @@
 
 namespace App\Command;
 
+use App\Entity\Fee;
+use App\Entity\Member;
+use App\Factory\MemberFactory;
+use App\Factory\PaymentFactory;
+use App\Factory\TeamFactory;
+use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -10,6 +16,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Component\Uid\Factory\UuidFactory;
 
 #[AsCommand(
     name: 'app:read-contributions',
@@ -19,10 +27,20 @@ use Symfony\Component\Console\Exception\RuntimeException;
 )]
 class ReadContributionsCommand extends Command
 {
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private PasswordHasherFactoryInterface $passwordHasherFactory,
+        string $name = null
+    ) {
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this
-            ->setDescription('Reads a XLSX file and retrieves members who paid their contribution fee from 2007 to now.')
+            ->setDescription(
+                'Reads a XLSX file and retrieves members who paid their contribution fee from 2007 to now.'
+            )
             ->addArgument('path', InputArgument::REQUIRED, 'The path to the XLSX file');
     }
 
@@ -38,10 +56,10 @@ class ReadContributionsCommand extends Command
 
         $sheet = $spreadsheet->getActiveSheet();
         $head = [];
-        $paymentYears = [];
+
+        $index = 1;
 
         foreach ($sheet->getRowIterator() as $row) {
-
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
 
@@ -59,12 +77,10 @@ class ReadContributionsCommand extends Command
             $paymentYears = array_combine($head, $memberData);
 
             // Process member data
-            if ($this->hasPaidContribution($paymentYears)) {
-                // Output or store the member data
-                $output->writeln("Member {$paymentYears['lastname']} {$paymentYears['firstname']} has paid their contributions.");
-            }
+            $this->hasPaidContribution($paymentYears, $index, $output);
 
-            if ($row->getRowIndex() === 35) {
+            $index++;
+            if ($row->getRowIndex() === 623) {
                 break;
             }
         }
@@ -72,17 +88,42 @@ class ReadContributionsCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function hasPaidContribution(array $paymentYears): bool
+    private function hasPaidContribution(array $paymentYears, $index, $output): void
     {
+        $teamNumber = $paymentYears['team_number'];
+        $firstName = $paymentYears['firstname'];
+        $lastName = $paymentYears['lastname'];
+
+        $team = TeamFactory::findOrCreate([
+            'number' =>  "isd_team_$teamNumber",
+        ]);
+
+        $member = MemberFactory::findOrCreate([
+            'number' => "isd_member_$index",
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'team' => $team
+        ]);
+
+        $feeRepo = $this->manager->getRepository(Fee::class);
         // Assuming payments data start from column index 4 (column E)
         foreach ($paymentYears as $year => $paymentYear) {
-            dump($year);
-            if ($paymentYear) {
-                if (str_contains('√', $paymentYear)) {
-                    return true;
+            /** @var Fee $fee */
+            $fee = $feeRepo->findOneBy(['year' => (int) $year]);
+
+            if ($paymentYear && $fee) {
+                if (str_contains('√', $paymentYear) || str_contains('25', $paymentYear)) {
+                    PaymentFactory::createOne([
+                        'amount' => str_contains('25', $paymentYear) ? $fee->getAmount() / 2 : $fee->getAmount(),
+                        'member' => $member
+                    ]);
                 }
             }
         }
-        return false;
+
+        $output->writeln(
+            "Member {$member->getLastName()} {$member->getFirstName()} {$member->getNumber()} team  {$team->getNumber()} has checked}."
+        );
+        $this->manager->flush();
     }
 }

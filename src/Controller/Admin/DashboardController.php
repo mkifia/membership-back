@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Address;
+use App\Entity\Admin;
 use App\Entity\Fee;
 use App\Entity\Member;
 use App\Entity\Payment;
@@ -50,6 +51,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Fee', 'fas fa-bank', Fee::class);
         yield MenuItem::linkToCrud('Team', 'fas fa-people-group', Team::class);
         yield MenuItem::linkToCrud('Member', 'fas fa-user', Member::class);
+        yield MenuItem::linkToCrud('Admin', 'fas fa-user-tie', Admin::class);
         yield MenuItem::linkToCrud('Payment', 'fas fa-credit-card', Payment::class);
         yield MenuItem::linkToCrud('Address', 'fas fa-map-location-dot', Address::class);
     }

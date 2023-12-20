@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Fee;
 use App\Repository\FeeRepository;
+use JetBrains\PhpStorm\ArrayShape;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -41,14 +42,13 @@ final class FeeFactory extends ModelFactory
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
      */
+    #[ArrayShape(['amount' => "float", 'year' => "string"])]
     protected function getDefaults(): array
     {
         return [
-            'amount' => self::faker()->randomFloat(),
-            'year' => self::faker()->randomNumber(),
+            'amount' => self::faker()->randomFloat(2, 0, 50),
+            'year' => self::faker()->year(),
         ];
     }
 

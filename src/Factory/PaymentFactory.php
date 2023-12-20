@@ -49,9 +49,9 @@ final class PaymentFactory extends ModelFactory
         return [
             'amount' => self::faker()->randomFloat(2, 0, 50),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'currency' => self::faker()->currencyCode(),
+            'currency' => 'EUR',
             'member' => MemberFactory::new(),
-            'method' => self::faker()->randomElement(['card', 'cash', 'transfer']),
+            'method' => self::faker()->randomElement(['check', 'cash']),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

@@ -2,30 +2,37 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Fee;
+use App\Entity\Admin;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class FeeCrudController extends AbstractCrudController
+class AdminCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Fee::class;
+        return Admin::class;
     }
 
-    /*public function configureFields(string $pageName): iterable
+    public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('amount'),
-            TextField::new('year'),
+            EmailField::new('email', 'Email'),
+            TextField::new('username', 'Username'),
+            TextField::new('firstName', 'First Name'),
+            TextField::new('lastName', 'Last Name'),
+            TextField::new('number', 'Number'),
+            TextField::new('phone', 'Phone'),
+            DateTimeField::new('dateOfBirth'),
         ];
-    }*/
+    }
+
 
     public function configureActions(Actions $actions): Actions
     {
