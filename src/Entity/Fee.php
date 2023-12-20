@@ -7,7 +7,10 @@ use App\Repository\FeeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['fee:read']],
+    denormalizationContext: ['groups' => ['fee:write']],
+)]
 class Fee
 {
     #[ORM\Id]

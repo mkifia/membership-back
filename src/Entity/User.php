@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -17,24 +18,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?string $number = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?string $phone = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
     private ?\DateTimeImmutable $dateOfBirth = null;
 
     #[ORM\Column]
@@ -49,6 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $salt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?\DateTimeImmutable $lastLogin = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -61,15 +70,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $emailVerificationToken = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?\DateTimeImmutable $verifiedAt = null;
 
     #[ORM\Column]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?Address $address = null;
 
     public function getId(): ?int

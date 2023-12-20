@@ -7,15 +7,21 @@ use App\Repository\MemberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['member:read']],
+    denormalizationContext: ['groups' => ['member:write']],
+)]
 class Member extends User
 {
     #[ORM\ManyToOne(inversedBy: 'members')]
+    #[Groups(['member:read'])]
     private ?Team $team = null;
 
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: Payment::class, orphanRemoval: true)]
+    #[Groups(['member:read'])]
     private Collection $payments;
 
     public function __construct()

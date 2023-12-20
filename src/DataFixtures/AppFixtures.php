@@ -21,21 +21,21 @@ class AppFixtures extends Fixture
     {
         FeeFactory::createMany(10);
         $addresses = AddressFactory::createMany(10);
-        $teams = TeamFactory::createMany(10);
-        $payments = PaymentFactory::createMany(10);
-        AdminFactory::createMany(5, function () use ($addresses, $teams) {
+        TeamFactory::createMany(10, function () use ($addresses) {
+            return [
+                'members' => MemberFactory::createMany(5, function () use ($addresses) {
+                    return [
+                        'address' => $addresses[array_rand($addresses)],
+                        'payments' => PaymentFactory::createMany(10),
+                    ];
+                }),
+            ];
+        });
+        AdminFactory::createMany(5, function () use ($addresses) {
             return [
                 'address' => $addresses[array_rand($addresses)],
             ];
         });
-        MemberFactory::createMany(5, function () use ($teams, $addresses, $payments) {
-            return [
-                'team' => $teams[array_rand($teams)],
-                'address' => $addresses[array_rand($addresses)],
-                'payments' => $payments,
-            ];
-        });
-
         $manager->flush();
     }
 }

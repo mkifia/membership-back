@@ -6,9 +6,13 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PaymentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['payment', 'payment:read']],
+    denormalizationContext: ['groups' => ['payment', 'payment:write']],
+)]
 class Payment
 {
     #[ORM\Id]
@@ -17,25 +21,32 @@ class Payment
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['payment:read', 'payment:write', 'member:read'])]
     private ?float $amount = null;
 
     #[ORM\Column(length: 3)]
+    #[Groups(['payment:read', 'payment:write', 'member:read'])]
     private ?string $currency = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['payment:read', 'payment:write', 'member:read'])]
     private ?string $method = null;
 
     #[ORM\Column]
+    #[Groups(['payment:read', 'payment:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['payment:read', 'payment:write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['payment:read', 'payment:write', 'member:read'])]
     private ?string $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'payments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['payment:read'])]
     private ?Member $member = null;
 
     public function getId(): ?int

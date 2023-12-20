@@ -7,9 +7,13 @@ use App\Repository\AddressRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['address:read']],
+    denormalizationContext: ['groups' => ['address:write']],
+)]
 class Address
 {
     #[ORM\Id]
@@ -18,21 +22,27 @@ class Address
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?string $suffix = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?string $state = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?string $Country = null;
 
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: User::class)]
+    #[Groups(['address:read'])]
     private Collection $users;
 
     public function __construct()
