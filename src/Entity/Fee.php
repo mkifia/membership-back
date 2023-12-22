@@ -24,6 +24,9 @@ class Fee
     #[ORM\Column]
     private ?int $year = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $discount = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,6 +52,18 @@ class Fee
     public function setYear(int $year): static
     {
         $this->year = $year;
+
+        return $this;
+    }
+
+    public function getDiscount(): ?int
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(?int $discount): static
+    {
+        $this->discount = $discount;
 
         return $this;
     }

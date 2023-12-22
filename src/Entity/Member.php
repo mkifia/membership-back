@@ -24,6 +24,12 @@ class Member extends User
     #[Groups(['member:read'])]
     private Collection $payments;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isForeign = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isMinor = null;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -67,6 +73,30 @@ class Member extends User
                 $payment->setMember(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsForeign(): ?bool
+    {
+        return $this->isForeign;
+    }
+
+    public function setIsForeign(?bool $isForeign): static
+    {
+        $this->isForeign = $isForeign;
+
+        return $this;
+    }
+
+    public function isIsMinor(): ?bool
+    {
+        return $this->isMinor;
+    }
+
+    public function setIsMinor(?bool $isMinor): static
+    {
+        $this->isMinor = $isMinor;
 
         return $this;
     }

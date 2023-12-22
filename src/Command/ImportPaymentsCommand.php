@@ -3,39 +3,40 @@
 namespace App\Command;
 
 use App\Entity\Fee;
-use App\Entity\Member;
 use App\Factory\MemberFactory;
 use App\Factory\PaymentFactory;
 use App\Factory\TeamFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
-use Symfony\Component\Uid\Factory\UuidFactory;
 
 #[AsCommand(
-    name: 'app:read-contributions',
-    description: 'Add a short description for your command',
-    aliases: ['app:read-contrib'],
+    name: 'app:import:payments',
+    description: 'Import payments from xls file with creating members and teams',
+    aliases: ['app:read-contrib', 'app:import:member-payments'],
     hidden: false
 )]
-class ReadContributionsCommand extends Command
+class ImportPaymentsCommand extends Command
 {
+    /**
+     * @param EntityManagerInterface $manager
+     * @param string|null $name
+     */
     public function __construct(
-        private EntityManagerInterface $manager,
-        private PasswordHasherFactoryInterface $passwordHasherFactory,
+        private readonly EntityManagerInterface $manager,
         string $name = null
     ) {
         parent::__construct($name);
     }
 
-    protected function configure()
+    /**
+     * @return void
+     */
+    protected function configure(): void
     {
         $this
             ->setDescription(
@@ -44,21 +45,24 @@ class ReadContributionsCommand extends Command
             ->addArgument('path', InputArgument::REQUIRED, 'The path to the XLSX file');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $path = $input->getArgument('path');
 
-        try {
-            $spreadsheet = IOFactory::load($path);
-        } catch (ReaderException $e) {
-            throw new RuntimeException("Error reading the XLSX file: " . $e->getMessage());
-        }
+        $spreadsheet = IOFactory::load($path);
 
         $sheet = $spreadsheet->getActiveSheet();
         $head = [];
 
+        $output->writeln(
+            'STARTING...'
+        );
         $index = 1;
-
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -68,7 +72,7 @@ class ReadContributionsCommand extends Command
                 $memberData[] = $cell->getValue();
             }
 
-            if ($row->getRowIndex() === 1) {
+            if (1 === $row->getRowIndex()) {
                 $head = $memberData;
 
                 continue;
@@ -77,52 +81,63 @@ class ReadContributionsCommand extends Command
             $paymentYears = array_combine($head, $memberData);
 
             // Process member data
-            $this->hasPaidContribution($paymentYears, $index, $output);
+            $this->importPayments($paymentYears, $index, $output);
 
-            $index++;
-            if ($row->getRowIndex() === 623) {
+            ++$index;
+            if (623 === $row->getRowIndex()) {
                 break;
             }
         }
+        $output->writeln(
+            'FINISHED!'
+        );
 
         return Command::SUCCESS;
     }
 
-    private function hasPaidContribution(array $paymentYears, $index, $output): void
+    /**
+     * @param array<string> $paymentYears
+     */
+    private function importPayments(array $paymentYears, int $index, OutputInterface $output): void
     {
         $teamNumber = $paymentYears['team_number'];
         $firstName = $paymentYears['firstname'];
         $lastName = $paymentYears['lastname'];
 
         $team = TeamFactory::findOrCreate([
-            'number' =>  "isd_team_$teamNumber",
+            'number' => "isd_team_$teamNumber",
+            'name' => "ISD FAMILY #$teamNumber",
         ]);
 
         $member = MemberFactory::findOrCreate([
             'number' => "isd_member_$index",
             'firstName' => $firstName,
             'lastName' => $lastName,
-            'team' => $team
+            'team' => $team,
         ]);
 
         $feeRepo = $this->manager->getRepository(Fee::class);
-        // Assuming payments data start from column index 4 (column E)
         foreach ($paymentYears as $year => $paymentYear) {
-            /** @var Fee $fee */
             $fee = $feeRepo->findOneBy(['year' => (int) $year]);
-
             if ($paymentYear && $fee) {
+                $amount = $fee->getAmount();
+
+                if (str_contains('25', $paymentYear)) {
+                    $amount = $amount * (1 - $fee->getDiscount() / 100);
+                }
+
                 if (str_contains('√', $paymentYear) || str_contains('25', $paymentYear)) {
                     PaymentFactory::createOne([
-                        'amount' => str_contains('25', $paymentYear) ? $fee->getAmount() / 2 : $fee->getAmount(),
-                        'member' => $member
+                        'amount' => $amount,
+                        'member' => $member,
+                        'year' => $year,
                     ]);
                 }
             }
         }
 
         $output->writeln(
-            "Member {$member->getLastName()} {$member->getFirstName()} {$member->getNumber()} team  {$team->getNumber()} has checked}."
+            "Member {$member->getFullName()} {$member->getNumber()} from {$team->getNumber()} has checked."
         );
         $this->manager->flush();
     }

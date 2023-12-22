@@ -24,6 +24,10 @@ class Payment
     #[Groups(['payment:read', 'payment:write', 'member:read'])]
     private ?float $amount = null;
 
+    #[ORM\Column]
+    #[Groups(['payment:read', 'payment:write', 'member:read'])]
+    private ?int $year = null;
+
     #[ORM\Column(length: 3)]
     #[Groups(['payment:read', 'payment:write', 'member:read'])]
     private ?string $currency = null;
@@ -62,6 +66,18 @@ class Payment
     public function setAmount(float $amount): static
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year): static
+    {
+        $this->year = $year;
 
         return $this;
     }

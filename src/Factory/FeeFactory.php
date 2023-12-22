@@ -43,12 +43,13 @@ final class FeeFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      */
-    #[ArrayShape(['amount' => "float", 'year' => "string"])]
+    #[ArrayShape(['amount' => "float", 'year' => "string", 'discount' => "integer"])]
     protected function getDefaults(): array
     {
         return [
             'amount' => self::faker()->randomFloat(2, 0, 50),
             'year' => self::faker()->year(),
+            'discount' => 50
         ];
     }
 
