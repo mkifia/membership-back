@@ -30,6 +30,9 @@ class Member extends User
     #[ORM\Column(nullable: true)]
     private ?bool $isMinor = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -97,6 +100,23 @@ class Member extends User
     public function setIsMinor(?bool $isMinor): static
     {
         $this->isMinor = $isMinor;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName() . ' (' . $this->getNumber() . ')';
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

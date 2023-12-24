@@ -1,0 +1,11 @@
+{# templates/admin/detail.html.twig #}
+<ul>
+    {% for member in field.value %}
+        <li>{{ member.firstName }} {{ member.lastName }} - {{ member.number }}</li>
+        {% for payment in member.payments %}
+            <li>{{ payment.amount }} - {{ payment.createdAt|date('d/m/Y') }}</li>
+        {% endfor %}
+    {% else %}
+        <li>No members found</li>
+    {% endfor %}
+</ul>

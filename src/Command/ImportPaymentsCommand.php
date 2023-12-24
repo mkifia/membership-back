@@ -129,8 +129,11 @@ class ImportPaymentsCommand extends Command
                 if (str_contains('√', $paymentYear) || str_contains('25', $paymentYear)) {
                     PaymentFactory::createOne([
                         'amount' => $amount,
+                        'createdAt' => new \DateTimeImmutable(),
                         'member' => $member,
+                        'updatedAt' => new \DateTimeImmutable(),
                         'year' => $year,
+                        'comment' => 'Imported from XLSX file',
                     ]);
                 }
             }

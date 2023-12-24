@@ -46,7 +46,7 @@ final class UserFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'createdAt' => new \DateTimeImmutable(),
             'email' => self::faker()->email(),
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
@@ -60,7 +60,7 @@ final class UserFactory extends ModelFactory
             'team' => TeamFactory::random(),
             'address' => AddressFactory::createOne(),
             'payments' => PaymentFactory::createMany(5),
-            'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'updatedAt' => new \DateTimeImmutable(),
         ];
     }
 

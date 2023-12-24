@@ -1,0 +1,28 @@
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+{% block page_title %}{{ entity.instance.fullName }}{% endblock %}
+{% block main %}
+    <!-- Custom content goes here -->
+    {{ parent() }}  {# Include the default detail view #}
+    <h2>Payments</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Currency</th>
+            <th scope="col">Method</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for payment in entity.instance.payments %}
+            <tr>
+                <td>{{ payment.year }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.currency }}</td>
+                <td>{{ payment.method }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

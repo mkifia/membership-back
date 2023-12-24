@@ -47,10 +47,10 @@ final class TeamFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'createdAt' => new \DateTimeImmutable(),
             'name' => self::faker()->name(255),
             'number' => self::faker()->slug(4, false),
-            'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'updatedAt' => new \DateTimeImmutable(),
         ];
     }
 

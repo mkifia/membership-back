@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -24,19 +25,27 @@ class MemberCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id', 'ID'),
-            EmailField::new('email', 'Email'),
             TextField::new('firstName', 'First Name'),
             TextField::new('lastName', 'Last Name'),
+            TextField::new('status', 'Status'),
             TextField::new('number', 'Number'),
             TextField::new('phone', 'Phone'),
-            DateTimeField::new('dateOfBirth'),
+            DateTimeField::new('bornAt', 'Born At'),
         ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->overrideTemplate('crud/detail', 'admin/member/detail.html.twig')
+            ->setFormThemes(['admin/form.html.twig', '@EasyAdmin/crud/form_theme.html.twig']);
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->remove(Crud::PAGE_INDEX, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE);
     }
 }

@@ -43,8 +43,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     #[Groups(['admin:read', 'admin:write', 'member:read', 'member:write', 'team:read'])]
-    private ?\DateTimeImmutable $dateOfBirth = null;
+    private ?\DateTimeImmutable $bornAt = null;
 
+    /**
+     * @var array<string>
+     */
     #[ORM\Column]
     private array $roles = [];
 
@@ -295,14 +298,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDateOfBirth(): ?\DateTimeImmutable
+    public function getBornAt(): ?\DateTimeImmutable
     {
-        return $this->dateOfBirth;
+        return $this->bornAt;
     }
 
-    public function setDateOfBirth(?\DateTimeImmutable $dateOfBirth): static
+    public function setBornAt(?\DateTimeImmutable $bornAt): static
     {
-        $this->dateOfBirth = $dateOfBirth;
+        $this->bornAt = $bornAt;
 
         return $this;
     }

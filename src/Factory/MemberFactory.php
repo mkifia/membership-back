@@ -46,18 +46,19 @@ final class MemberFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'bornAt' => self::faker()->dateTimeBetween('-80 years', 'now'),
+            'createdAt' => new \DateTimeImmutable(),
             'email' => self::faker()->email(),
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
-            'phone' => self::faker()->phoneNumber(),
-            'dateOfBirth' => self::faker()->dateTimeBetween('-80 years', 'now'),
             'number' => self::faker()->slug(4, false),
             'password' => $this->passwordHasherFactory
                 ->getPasswordHasher(Member::class)->hash('Azerty1234!'),
+            'phone' => self::faker()->phoneNumber(),
             'roles' => ['ROLE_USER'],
             'salt' => self::faker()->uuid(),
-            'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'status' => self::faker()->randomElement(['suspended', 'active', 'overdue', 'deleted']),
+            'updatedAt' => new \DateTimeImmutable(),
         ];
     }
 
