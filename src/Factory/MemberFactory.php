@@ -33,7 +33,7 @@ final class MemberFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      */
-    public function __construct(private PasswordHasherFactoryInterface $passwordHasherFactory)
+    public function __construct(private readonly PasswordHasherFactoryInterface $passwordHasherFactory)
     {
         parent::__construct();
     }
@@ -52,8 +52,7 @@ final class MemberFactory extends ModelFactory
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'number' => self::faker()->slug(4, false),
-            'password' => $this->passwordHasherFactory
-                ->getPasswordHasher(Member::class)->hash('Azerty1234!'),
+            'password' => 'Azerty1234!',
             'phone' => self::faker()->phoneNumber(),
             'roles' => ['ROLE_USER'],
             'salt' => self::faker()->uuid(),
@@ -68,8 +67,10 @@ final class MemberFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(Member $member): void {})
-        ;
+            ->afterInstantiate(function (Member $member) {
+                $member->setPassword($this->passwordHasherFactory
+                    ->getPasswordHasher(Member::class)->hash($member->getPassword()));
+            });
     }
 
     protected static function getClass(): string

@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Admin;
+use App\Entity\User;
 use App\Repository\AdminRepository;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Zenstruck\Foundry\ModelFactory;
@@ -33,13 +34,16 @@ final class AdminFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      */
-    public function __construct(private PasswordHasherFactoryInterface $passwordHasherFactory)
+    public function __construct(private readonly PasswordHasherFactoryInterface $passwordHasherFactory)
     {
         parent::__construct();
     }
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
+     */
+    /**
+     * @return array<string, mixed>
      */
     protected function getDefaults(): array
     {
@@ -58,8 +62,7 @@ final class AdminFactory extends ModelFactory
             ]),
             'dateOfBirth' => self::faker()->dateTimeBetween('-80 years', 'now'),
             'number' => self::faker()->slug(4, false),
-            'password' => $this->passwordHasherFactory
-                ->getPasswordHasher(Admin::class)->hash('Azerty1234!'),
+            'password' => 'Azerty1234',
             'roles' => ['ROLE_ADMIN', 'ROLE_USER'],
             'salt' => self::faker()->uuid(),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -72,8 +75,10 @@ final class AdminFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(Admin $admin): void {})
-        ;
+            ->afterInstantiate(function (User $admin) {
+                $admin->setPassword($this->passwordHasherFactory
+                    ->getPasswordHasher(Admin::class)->hash($admin->getPassword()));
+            });
     }
 
     protected static function getClass(): string

@@ -27,7 +27,6 @@ use Zenstruck\Foundry\RepositoryProxy;
  * @method static Address[]|Proxy[]                 findBy(array $attributes)
  * @method static Address[]|Proxy[]                 randomRange(int $min, int $max, array $attributes = [])
  * @method static Address[]|Proxy[]                 randomSet(int $number, array $attributes = [])
- *
  */
 final class AddressFactory extends ModelFactory
 {
@@ -40,22 +39,17 @@ final class AddressFactory extends ModelFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
+     * @return array<string, mixed>
      */
-    #[ArrayShape([
-        'Country' => "string",
-        'postalCode' => "string",
-        'state' => "string",
-        'suffix' => "string",
-        'street' => "string"
-    ])] protected function getDefaults(): array
+    protected function getDefaults(): array
     {
         return [
-            'Country' => self::faker()->country(),
+            'country' => self::faker()->country(),
             'postalCode' => self::faker()->postcode(),
+            'city' => self::faker()->city(),
             'state' => self::faker()->citySuffix(),
-            'suffix' => self::faker()->streetSuffix(),
             'street' => self::faker()->streetAddress(),
+            'suffix' => self::faker()->streetSuffix(),
         ];
     }
 
