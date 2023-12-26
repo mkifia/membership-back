@@ -2,15 +2,12 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Member;
 use App\Entity\Team;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class TeamCrudController extends AbstractCrudController
@@ -20,20 +17,20 @@ class TeamCrudController extends AbstractCrudController
         return Team::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->overrideTemplate('crud/detail', 'admin/team/detail.html.twig')
+            ->showEntityActionsInlined()
+            ->setFormThemes(['admin/member/form.html.twig', '@EasyAdmin/crud/form_theme.html.twig']);
+    }
+
     public function configureFields(string $pageName): iterable
     {
-        $members = CollectionField::new('members')
-            ->allowAdd()
-            ->allowDelete()
-            ->setEntryType(Member::class)
-            ->setFormTypeOption('by_reference', false)
-            ->setTemplatePath('admin/team/detail.html.twig');
-
         return [
-            IdField::new('id'),
-            TextField::new('name'),
-            TextField::new('number'),
-            $members->onlyOnDetail(),
+            TextField::new('name', 'Name')->hideWhenCreating(),
+            TextField::new('number', 'Number')->hideWhenCreating(),
+            CollectionField::new('members', 'Members')->useEntryCrudForm()->hideWhenCreating(),
         ];
     }
 

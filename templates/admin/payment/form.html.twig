@@ -1,0 +1,11 @@
+{% extends '@EasyAdmin/crud/form_theme.html.twig' %}
+{% block field_widget %}
+    {% if field_options.type == 'file' %}
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="{{ field_options.id }}" name="{{ field_options.name }}" {% if field_options.attr is defined %}{{ block('attributes') }}{% endif %}>
+            <label class="custom-file-label" for="{{ field_options.id }}">Choose file</label>
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

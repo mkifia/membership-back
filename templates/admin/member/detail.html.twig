@@ -1,8 +1,42 @@
 {% extends '@EasyAdmin/crud/detail.html.twig' %}
-{% block page_title %}{{ entity.instance.fullName }}{% endblock %}
+{% block page_title %}{{ entity.instance.fullName }} ({{ entity.instance.number }}){% endblock %}
 {% block main %}
     <!-- Custom content goes here -->
-    {{ parent() }}  {# Include the default detail view #}
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Member Details</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-3">Full Name</dt>
+                                <dd class="col-sm-9">{{ entity.instance.fullName }}</dd>
+                                <dt class="col-sm-3">Email</dt>
+                                <dd class="col-sm-9">{{ entity.instance.email }}</dd>
+                                <dt class="col-sm-3">Phone</dt>
+                                <dd class="col-sm-9">{{ entity.instance.phone }}</dd>
+                                <dt class="col-sm-3">Address</dt>
+                                <dd class="col-sm-9">
+                                    {% if entity.instance.address is defined and entity.instance.address is not null %}
+                                        {{ entity.instance.address.street }}<br>
+                                        {{ entity.instance.address.suffix }}<br>
+                                        {{ entity.instance.address.city }}<br>
+                                        {{ entity.instance.address.postalCode }}<br>
+                                        {{ entity.instance.address.country }}<br>
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Status</dt>
+                                <dd class="col-sm-9">{{ entity.instance.status }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
     <h2>Payments</h2>
     <table class="table">
         <thead>
@@ -11,6 +45,8 @@
             <th scope="col">Amount</th>
             <th scope="col">Currency</th>
             <th scope="col">Method</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Comment</th>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +56,8 @@
                 <td>{{ payment.amount }}</td>
                 <td>{{ payment.currency }}</td>
                 <td>{{ payment.method }}</td>
+                <td>{{ payment.createdAt|date('D, d M Y H:i:s') }}</td>
+                <td>{{ payment.comment }}</td>
             </tr>
         {% endfor %}
         </tbody>

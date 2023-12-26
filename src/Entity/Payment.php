@@ -53,6 +53,18 @@ class Payment
     #[Groups(['payment:read'])]
     private ?Member $member = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reference = null;
+
+    #[ORM\ManyToOne(inversedBy: 'paymentsAdded')]
+    private ?Admin $addedBy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'paymentsVerified')]
+    private ?Admin $validatedBy = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +162,54 @@ class Payment
     public function setMember(?Member $member): static
     {
         $this->member = $member;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): static
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getAddedBy(): ?Admin
+    {
+        return $this->addedBy;
+    }
+
+    public function setAddedBy(?Admin $addedBy): static
+    {
+        $this->addedBy = $addedBy;
+
+        return $this;
+    }
+
+    public function getValidatedBy(): ?Admin
+    {
+        return $this->validatedBy;
+    }
+
+    public function setValidatedBy(?Admin $validatedBy): static
+    {
+        $this->validatedBy = $validatedBy;
 
         return $this;
     }

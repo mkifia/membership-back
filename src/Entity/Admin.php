@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\AdminRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -21,6 +23,18 @@ class Admin extends User
     #[ORM\Column(length: 255)]
     #[Groups(['admin:read', 'admin:write'])]
     private ?string $username = null;
+
+    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Payment::class)]
+    private Collection $paymentsAdded;
+
+    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Payment::class)]
+    private Collection $paymentsVerified;
+
+    public function __construct()
+    {
+        $this->paymentsAdded = new ArrayCollection();
+        $this->paymentsVerified = new ArrayCollection();
+    }
 
     public function getJob(): ?string
     {
