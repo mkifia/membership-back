@@ -31,16 +31,23 @@ class Address
 
     #[ORM\Column(length: 255)]
     #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
-    private ?string $state = null;
+    private ?string $city = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
     private ?string $postalCode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
+    private ?string $state = null;
+
     #[ORM\Column(length: 255)]
     #[Groups(['address:read', 'address:write', 'admin:read', 'admin:write', 'member:read', 'member:write'])]
-    private ?string $Country = null;
+    private ?string $country = null;
 
+    /**
+     * @var Collection<int, User>
+     */
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: User::class)]
     #[Groups(['address:read'])]
     private Collection $users;
@@ -105,12 +112,12 @@ class Address
 
     public function getCountry(): ?string
     {
-        return $this->Country;
+        return $this->country;
     }
 
-    public function setCountry(string $Country): static
+    public function setCountry(string $country): static
     {
-        $this->Country = $Country;
+        $this->country = $country;
 
         return $this;
     }
@@ -143,5 +150,23 @@ class Address
         }
 
         return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getStreet() . ' ' . $this->getSuffix() . ', ' .
+            $this->getCity() . ', ' . $this->getState() . ' ' . $this->getPostalCode() . ', ' . $this->getCountry();
     }
 }

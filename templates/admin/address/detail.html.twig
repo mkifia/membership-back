@@ -1,0 +1,56 @@
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+{% block page_title %}Address detail{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">{{ 'Address Details'|trans }}</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">{{ 'Address'|trans }}</dt>
+                                <dd class="col-sm-8">
+                                    {% if entity.instance is defined and entity.instance is not null %}
+                                        {{ entity.instance.street }}<br>
+                                        {{ entity.instance.suffix }}<br>
+                                        {{ entity.instance.city }}<br>
+                                        {{ entity.instance.postalCode }}<br>
+                                        {{ entity.instance.country }}<br>
+                                    {% endif %}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h3>Users at this address</h3>
+    <div class="row">
+    {% for user in entity.instance.users %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">{{ user.fullName }}</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">{{ 'Full Name'|trans }}</dt>
+                                <dd class="col-sm-8">{{ user.fullName }}</dd>
+                                <dt class="col-sm-4">{{ 'Email'|trans }}</dt>
+                                <dd class="col-sm-8">{{ user.email }}</dd>
+                                <dt class="col-sm-4">{{ 'Phone'|trans }}</dt>
+                                <dd class="col-sm-8">{{ user.phone }}</dd>
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">{{ user.status }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

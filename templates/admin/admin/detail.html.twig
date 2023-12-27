@@ -1,0 +1,46 @@
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+{% block page_title %}{{ entity.instance.fullName }} ({{ entity.instance.number }}){% endblock %}
+{% block main %}
+    <!-- Custom content goes here -->
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">{{ 'Admin Details'|trans }}</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">{{ 'Full Name'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.fullName }}</dd>
+                                <dt class="col-sm-4">{{ 'Email'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.email }}</dd>
+                                <dt class="col-sm-4">{{ 'Phone'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.phone }}</dd>
+                                <dt class="col-sm-4">{{ 'Address'|trans }}</dt>
+                                <dd class="col-sm-8">
+                                    {% if entity.instance.address is defined and entity.instance.address is not null %}
+                                        {{ entity.instance.address.street }}<br>
+                                        {{ entity.instance.address.suffix }}<br>
+                                        {{ entity.instance.address.city }}<br>
+                                        {{ entity.instance.address.postalCode }}<br>
+                                        {{ entity.instance.address.country }}<br>
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-4">Roles</dt>
+                                <dd class="col-sm-8">
+                                    {% for role in entity.instance.roles %}
+                                        {{ role }}<br>
+                                    {% endfor %}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- End custom content -->
+{% endblock %}
+

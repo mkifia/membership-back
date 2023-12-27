@@ -1,0 +1,73 @@
+Dashboard: Accueil
+Fee: Frais
+Team: Équipe
+Member: Membre
+Members: Membres
+Admin: Administrateur
+Admins: Administrateurs
+User: Utilisateur
+Users: Utilisateurs
+Name: Nom
+Email: Courriel
+Password: Mot de passe
+Confirm password: Confirmer le mot de passe
+Create: Créer
+Edit: Modifier
+Delete: Supprimer
+Save: Sauvegarder
+Cancel: Annuler
+Logout: Déconnexion
+Login: Connexion
+Register: Inscription
+Remember me: Se souvenir de moi
+Forgot password?: Mot de passe oublié?
+Send password reset link: Envoyer le lien de réinitialisation du mot de passe
+You are logged in!: Vous êtes connecté!
+You are logged out!: Vous êtes déconnecté!
+You are registered!: Vous êtes inscrit!
+You are not registered!: Vous n'êtes pas inscrit!
+You are not logged in!: Vous n'êtes pas connecté!
+You are not logged out!: Vous n'êtes pas déconnecté!
+You are not an admin!: Vous n'êtes pas un administrateur!
+You are not a user!: Vous n'êtes pas un utilisateur!
+You are not a member!: Vous n'êtes pas un membre!
+Payment: Paiement
+Address: Adresse
+Street: Rue
+City: Ville
+Suffix: Suffixe
+State: État
+Postal Code: Code Postal
+Country: Pays
+Phone: Téléphone
+Username: Nom d'utilisateur
+First Name: Prénom
+Last Name: Nom de famille
+Number: Numéro
+Born At: Né au
+Cash: Liquide
+Check: Chèque
+Credit Card: Carte de crédit
+Paypal: Paypal
+Transfer: Transfert
+Year: Année
+Amount: Montant
+Currency: Devise
+Method: Méthode
+Created At: Créé au
+Comment: Commentaire
+Full Name: Nom complet
+Member Details: Détails du membre
+Choose file: Choisissez un fichier
+Address Details: Détails de l'adresse
+Admin Details: Détails de l'administrateur
+Payment Date: Date de paiement
+Payment Method: Méthode de paiement
+Payment Status: Statut de paiement
+Payment Reference: Référence de paiement
+Added By: Ajouté par
+Validated By: Validé par
+Payment Details: Détails de paiement
+for: pour
+Membership Admin: Administration des adhésions
+in: en

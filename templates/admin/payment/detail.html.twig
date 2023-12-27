@@ -4,29 +4,33 @@
 {% endblock %}
 {% block main %}
 <!-- Custom content goes here -->
-    <h3>Payment Details for {{ entity.instance.member.fullName }} in {{ entity.instance.year }}</h3>
+    <h3>{{ 'Payment Details'|trans }} {{ 'for'|trans }} {{ entity.instance.member.fullName }} {{ 'in'|trans }} {{ entity.instance.year }}</h3>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Payment Details</div>
+                <div class="card-header">{{ 'Payment Details'|trans }}</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-3">Amount</dt>
-                                <dd class="col-sm-9">{{ entity.instance.amount }} {{ entity.instance.currency }}</dd>
-                                <dt class="col-sm-3">Year</dt>
-                                <dd class="col-sm-9">{{ entity.instance.year }}</dd>
-                                <dt class="col-sm-3">Payment Date</dt>
-                                <dd class="col-sm-9">{{ entity.instance.createdAt|date('Y-m-d') }}</dd>
-                                <dt class="col-sm-3">Payment Method</dt>
-                                <dd class="col-sm-9">{{ entity.instance.method }}</dd>
-                                <dt class="col-sm-3">Payment Status</dt>
-                                <dd class="col-sm-9">{{ entity.instance.status }}</dd>
-                                <dt class="col-sm-3">Payment Reference</dt>
-                                <dd class="col-sm-9">{{ entity.instance.reference }}</dd>
-                                <dt class="col-sm-3">Comment</dt>
-                                <dd class="col-sm-9">{{ entity.instance.comment }}</dd>
+                                <dt class="col-sm-4">{{ 'Amount'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.amount }} {{ entity.instance.currency }}</dd>
+                                <dt class="col-sm-4">{{ 'Year'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.year }}</dd>
+                                <dt class="col-sm-4">{{ 'Payment Date'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.createdAt|date('Y-m-d') }}</dd>
+                                <dt class="col-sm-4">{{ 'Payment Method'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.method }}</dd>
+                                <dt class="col-sm-4">{{ 'Payment Status'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.status }}</dd>
+                                <dt class="col-sm-4">{{ 'Payment Reference'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.reference }}</dd>
+                                <dt class="col-sm-4">{{ 'Comment'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.comment }}</dd>
+                                <dt class="col-sm-4">{{ 'Added By'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.addedBy.fullName }}</dd>
+                                <dt class="col-sm-4">{{ 'Validated By'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.validatedBy.fullName }}</dd>
                             </dl>
                         </div>
                     </div>

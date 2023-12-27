@@ -60,7 +60,7 @@ final class AdminFactory extends ModelFactory
                 'Treasurer',
                 'Advisor',
             ]),
-            'dateOfBirth' => self::faker()->dateTimeBetween('-80 years', 'now'),
+            'bornAt' => self::faker()->dateTimeBetween('-80 years', 'now'),
             'number' => self::faker()->slug(4, false),
             'password' => 'Azerty1234',
             'roles' => ['ROLE_ADMIN', 'ROLE_USER'],
@@ -75,7 +75,7 @@ final class AdminFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            ->afterInstantiate(function (User $admin) {
+            ->afterInstantiate(function (Admin $admin) {
                 $admin->setPassword($this->passwordHasherFactory
                     ->getPasswordHasher(Admin::class)->hash($admin->getPassword()));
             });

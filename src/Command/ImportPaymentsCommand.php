@@ -2,7 +2,9 @@
 
 namespace App\Command;
 
+use App\Entity\Admin;
 use App\Entity\Fee;
+use App\Factory\AddressFactory;
 use App\Factory\MemberFactory;
 use App\Factory\PaymentFactory;
 use App\Factory\TeamFactory;
@@ -113,8 +115,11 @@ class ImportPaymentsCommand extends Command
             'number' => "isd_member_$index",
             'firstName' => $firstName,
             'lastName' => $lastName,
+            'address' => AddressFactory::new(),
             'team' => $team,
         ]);
+
+        $admin = $this->manager->getRepository(Admin::class)->findAll()[0];
 
         $feeRepo = $this->manager->getRepository(Fee::class);
         foreach ($paymentYears as $year => $paymentYear) {
@@ -133,6 +138,8 @@ class ImportPaymentsCommand extends Command
                         'member' => $member,
                         'updatedAt' => new \DateTimeImmutable(),
                         'year' => $year,
+                        'addedBy' => $admin,
+                        'validatedBy' => $admin,
                         'comment' => 'Imported from XLSX file',
                     ]);
                 }

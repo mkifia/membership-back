@@ -47,6 +47,7 @@ final class FeeFactory extends ModelFactory
     {
         return [
             'amount' => self::faker()->randomFloat(2, 0, 50),
+            'currency' => 'EUR',
             'year' => self::faker()->year(),
             'discount' => 50,
         ];

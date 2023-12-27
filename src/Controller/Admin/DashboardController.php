@@ -14,27 +14,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function Symfony\Component\Translation\t;
+
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+    #[Route('/admin/{_locale}', name: 'admin')]
     public function index(): Response
     {
-//        return parent::index();
-
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
         return $this->render('admin/dashboard.html.twig');
     }
 
@@ -42,17 +28,22 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->renderContentMaximized()
-            ->setTitle('Membership Admin');
+            ->setTranslationDomain('membership')
+            ->setTitle(t('Membership Admin'))
+            ->setLocales([
+                'en' => '🇬🇧 English',
+                'fr' => '🇵🇱 Français',
+            ]);
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Fee', 'fas fa-bank', Fee::class);
-        yield MenuItem::linkToCrud('Team', 'fas fa-people-group', Team::class);
-        yield MenuItem::linkToCrud('Member', 'fas fa-user', Member::class);
-        yield MenuItem::linkToCrud('Admin', 'fas fa-user-tie', Admin::class);
-        yield MenuItem::linkToCrud('Payment', 'fas fa-credit-card', Payment::class);
-        yield MenuItem::linkToCrud('Address', 'fas fa-map-location-dot', Address::class);
+        yield MenuItem::linkToDashboard(t('Dashboard'), 'fa fa-home');
+        yield MenuItem::linkToCrud(t('Fee'), 'fas fa-bank', Fee::class);
+        yield MenuItem::linkToCrud(t('Team'), 'fas fa-people-group', Team::class);
+        yield MenuItem::linkToCrud(t('Member'), 'fas fa-user', Member::class);
+        yield MenuItem::linkToCrud(t('Admin'), 'fas fa-user-tie', Admin::class);
+        yield MenuItem::linkToCrud(t('Payment'), 'fas fa-credit-card', Payment::class);
+        yield MenuItem::linkToCrud(t('Address'), 'fas fa-map-location-dot', Address::class);
     }
 }

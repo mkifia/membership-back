@@ -8,10 +8,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use function Symfony\Component\Translation\t;
 
 class PaymentCrudController extends AbstractCrudController
 {
@@ -23,13 +23,28 @@ class PaymentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            AssociationField::new('member', 'Member')
+            AssociationField::new('member', t('Member'))
                 ->setCrudController(MemberCrudController::class)->hideOnDetail(),
-            NumberField::new('year')->setThousandsSeparator('')->hideOnDetail(),
-            NumberField::new('amount')->hideOnDetail(),
-            TextField::new('currency')->hideOnDetail(),
-            TextField::new('method')->hideOnDetail(),
-            TextEditorField::new('comment')->hideOnDetail(),
+            NumberField::new('year', t('Year'))->setThousandsSeparator(''),
+            NumberField::new('amount', t('Amount'))->setNumDecimals(2)->setFormTypeOptions([
+                'grouping' => true,
+                'scale' => 2,
+                'rounding_mode' => \NumberFormatter::ROUND_HALFUP,
+            ]),
+            ChoiceField::new('currency', t('Currency'))
+            ->setChoices([
+                'EUR' => 'EUR',
+                'USD' => 'USD',
+            ])->hideOnDetail(),
+            ChoiceField::new('method', t('Method'))->hideOnDetail()
+            ->setChoices([
+                'Cash' => 'cash',
+                'Check' => 'check',
+                'Transfer' => 'transfer',
+                'Card' => 'card',
+            ]),
+
+            TextEditorField::new('comment', t('Comment'))->hideOnDetail(),
         ];
     }
 
@@ -46,6 +61,7 @@ class PaymentCrudController extends AbstractCrudController
     {
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->remove(Crud::PAGE_INDEX, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE);
     }
 }

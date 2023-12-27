@@ -21,6 +21,9 @@ class Fee
     #[ORM\Column]
     private ?float $amount = null;
 
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $currency = null;
+
     #[ORM\Column]
     private ?int $year = null;
 
@@ -64,6 +67,18 @@ class Fee
     public function setDiscount(?int $discount): static
     {
         $this->discount = $discount;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?string $currency): static
+    {
+        $this->currency = $currency;
 
         return $this;
     }

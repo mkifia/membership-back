@@ -6,29 +6,29 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Member Details</div>
+                <div class="card-header">{{ 'Member Details'|trans }}</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-3">Full Name</dt>
-                                <dd class="col-sm-9">{{ entity.instance.fullName }}</dd>
-                                <dt class="col-sm-3">Email</dt>
-                                <dd class="col-sm-9">{{ entity.instance.email }}</dd>
-                                <dt class="col-sm-3">Phone</dt>
-                                <dd class="col-sm-9">{{ entity.instance.phone }}</dd>
-                                <dt class="col-sm-3">Address</dt>
-                                <dd class="col-sm-9">
+                                <dt class="col-sm-4">{{ 'Full Name'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.fullName }}</dd>
+                                <dt class="col-sm-4">{{ 'Email'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.email }}</dd>
+                                <dt class="col-sm-4">{{ 'Phone'|trans }}</dt>
+                                <dd class="col-sm-8">{{ entity.instance.phone }}</dd>
+                                <dt class="col-sm-4">{{ 'Address'|trans }}</dt>
+                                <dd class="col-sm-8">
                                     {% if entity.instance.address is defined and entity.instance.address is not null %}
-                                        {{ entity.instance.address.street }}<br>
-                                        {{ entity.instance.address.suffix }}<br>
-                                        {{ entity.instance.address.city }}<br>
-                                        {{ entity.instance.address.postalCode }}<br>
-                                        {{ entity.instance.address.country }}<br>
+                                        {{ entity.instance.address.street }}
+                                        {{ entity.instance.address.suffix }}
+                                        {{ entity.instance.address.city }}
+                                        {{ entity.instance.address.postalCode }}
+                                        {{ entity.instance.address.country }}
                                     {% endif %}
                                 </dd>
-                                <dt class="col-sm-3">Status</dt>
-                                <dd class="col-sm-9">{{ entity.instance.status }}</dd>
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">{{ entity.instance.status }}</dd>
                             </dl>
                         </div>
                     </div>
@@ -41,12 +41,12 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Year</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Currency</th>
-            <th scope="col">Method</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Comment</th>
+            <th scope="col">{{ 'Year'|trans }}</th>
+            <th scope="col">{{ 'Amount'|trans }}</th>
+            <th scope="col">{{ 'Currency'|trans }}</th>
+            <th scope="col">{{ 'Method'|trans }}</th>
+            <th scope="col">{{ 'Created At'|trans }}</th>
+            <th scope="col">{{ 'Comment'|trans }}</th>
         </tr>
         </thead>
         <tbody>

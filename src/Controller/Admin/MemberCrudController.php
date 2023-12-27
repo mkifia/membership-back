@@ -9,9 +9,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+
+use function Symfony\Component\Translation\t;
 
 class MemberCrudController extends AbstractCrudController
 {
@@ -24,15 +27,23 @@ class MemberCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id', 'ID')->hideOnForm(),
-            AssociationField::new('team', 'Team')
+            AssociationField::new('team', t('Team'))
                 ->setCrudController(TeamCrudController::class),
-            TextField::new('email', 'Email')->hideOnIndex(),
-            TextField::new('firstName', 'First Name'),
-            TextField::new('lastName', 'Last Name'),
-            TextField::new('status', 'Status'),
-            TextField::new('number', 'Number'),
-            TextField::new('phone', 'Phone'),
-            DateTimeField::new('bornAt', 'Born At')->onlyOnDetail(),
+            TextField::new('email', t('Email'))->hideOnIndex(),
+            TextField::new('firstName', t('First Name')),
+            TextField::new('lastName', t('Last Name')),
+            ChoiceField::new('status', 'Status')
+                ->setChoices([
+                    'Suspended' => 'suspended',
+                    'Active' => 'active',
+                    'Overdue' => 'overdue',
+                    'Deleted' => 'deleted',
+                ])->hideOnIndex(),
+            TextField::new('number', t('Number')),
+            TextField::new('phone', t('Phone')),
+            DateTimeField::new('bornAt', t('Born At'))->onlyOnDetail(),
+            AssociationField::new('address', t('Address'))
+                ->setCrudController(AddressCrudController::class)->hideOnIndex(),
         ];
     }
 
@@ -52,6 +63,7 @@ class MemberCrudController extends AbstractCrudController
             ->add('lastName')
             ->add('number')
             ->add('status')
+            ->add('team')
         ;
     }
 

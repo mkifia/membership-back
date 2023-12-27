@@ -10,6 +10,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+use function Symfony\Component\Translation\t;
+
 class TeamCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -28,9 +30,10 @@ class TeamCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name', 'Name')->hideWhenCreating(),
-            TextField::new('number', 'Number')->hideWhenCreating(),
-            CollectionField::new('members', 'Members')->useEntryCrudForm()->hideWhenCreating(),
+            TextField::new('name', t('Name')),
+            TextField::new('number', t('Number')),
+            CollectionField::new('members', t('Members'))
+                ->useEntryCrudForm()->setEntryIsComplex(),
         ];
     }
 
@@ -38,6 +41,7 @@ class TeamCrudController extends AbstractCrudController
     {
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, Action::INDEX)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE);
     }

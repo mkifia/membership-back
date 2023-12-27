@@ -52,7 +52,7 @@ final class MemberFactory extends ModelFactory
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'number' => self::faker()->slug(4, false),
-            'password' => 'Azerty1234!',
+            'password' => 'Azerty1234',
             'phone' => self::faker()->phoneNumber(),
             'roles' => ['ROLE_USER'],
             'salt' => self::faker()->uuid(),

@@ -41,8 +41,6 @@ final class PaymentFactory extends ModelFactory
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
      */
     protected function getDefaults(): array
     {
@@ -50,7 +48,9 @@ final class PaymentFactory extends ModelFactory
             'amount' => self::faker()->randomFloat(2, 0, 50),
             'currency' => 'EUR',
             'member' => MemberFactory::new(),
-            'method' => self::faker()->randomElement(['check', 'cash']),
+            'status' => self::faker()->randomElement(['pending', 'paid', 'overdue', 'canceled']),
+            'method' => self::faker()->randomElement(['cash', 'check', 'transfer', 'card']),
+            'year' => self::faker()->year(),
         ];
     }
 
