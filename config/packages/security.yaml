@@ -24,14 +24,14 @@ security:
             stateless: true
             provider: app_user_provider
             json_login:
-                check_path: api_login_check
+                check_path: api_login
                 # Handlers are optional, but make sure they are defined correctly if used
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
 
         admin:
-            pattern: ^/admin
+            pattern: ^/{_locale}/admin
             provider: admin_user_provider
             lazy: true
             form_login:
@@ -45,12 +45,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/admin/login,       roles: PUBLIC_ACCESS }
-         - { path: ^/admin,             roles: ROLE_ADMIN }
-         - { path: ^/api/docs,          roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
-         - { path: ^/api/login_check,   roles: PUBLIC_ACCESS }
-         - { path: ^/api$,              roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
-         - { path: ^/api,               roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN, ROLE_USER] }
+        - { path: "^/{_locale}/admin/login", roles: PUBLIC_ACCESS }
+        - { path: "^/{_locale}/admin", roles: [ ROLE_ADMIN, ROLE_EDIT ] }
+        - { path: "^/api/docs", roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
+        - { path: "^/api/login", roles: PUBLIC_ACCESS }
+        - { path: "^/api$", roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
+        - { path: "^/api", roles: [ IS_AUTHENTICATED_FULLY, ROLE_ADMIN, ROLE_USER ] }
 
 when@test:
     security:

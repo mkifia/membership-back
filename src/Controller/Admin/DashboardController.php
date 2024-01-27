@@ -12,13 +12,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 use function Symfony\Component\Translation\t;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin/{_locale}', name: 'admin')]
+    #[Route('/{_locale}/admin', name: 'admin', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig');

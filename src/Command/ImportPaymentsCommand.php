@@ -9,6 +9,7 @@ use App\Factory\MemberFactory;
 use App\Factory\PaymentFactory;
 use App\Factory\TeamFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -51,6 +52,7 @@ class ImportPaymentsCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -71,6 +73,10 @@ class ImportPaymentsCommand extends Command
 
             $memberData = [];
             foreach ($cellIterator as $cell) {
+                if ($cell->getColumn() === 'U' && $cell->getValue() === '2025') {
+                    break;
+                }
+
                 $memberData[] = $cell->getValue();
             }
 
@@ -103,8 +109,8 @@ class ImportPaymentsCommand extends Command
     private function importPayments(array $paymentYears, int $index, OutputInterface $output): void
     {
         $teamNumber = $paymentYears['team_number'];
-        $firstName = $paymentYears['firstname'];
-        $lastName = $paymentYears['lastname'];
+        $firstName = $paymentYears['first_name'];
+        $lastName = $paymentYears['last_name'];
 
         $team = TeamFactory::findOrCreate([
             'number' => "isd_team_$teamNumber",
