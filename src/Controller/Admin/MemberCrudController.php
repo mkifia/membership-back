@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Member;
@@ -38,7 +40,7 @@ class MemberCrudController extends AbstractCrudController
                     'Active' => 'active',
                     'Overdue' => 'overdue',
                     'Deleted' => 'deleted',
-                ])->hideOnIndex(),
+                ]),
             TextField::new('number', t('Number')),
             TextField::new('phone', t('Phone')),
             DateTimeField::new('bornAt', t('Born At'))->onlyOnDetail(),

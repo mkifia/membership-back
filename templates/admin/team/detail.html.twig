@@ -5,7 +5,17 @@
         {% for member in entity.instance.members %}
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">{{ member.fullName }}</div>
+                    <div class="card-header">{{ member.fullName }}
+                        <span>
+                            {% if member.status == 'overdue' %}
+                            <i class="fa-solid fa-circle" style="color: #ff0000;"></i>
+                            {% elseif member.status == 'active' %}
+                            <i class="fa-solid fa-circle" style="color: #00ff00;"></i>
+                            {% elseif member.status == 'inactive' %}
+                            <i class="fa-solid fa-circle" style="color: #000000;"></i>
+                            {% endif %}
+                        </span>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -23,6 +33,7 @@
                         </div>
                     </div>
                 </div>
+                <br>
             </div>
         {% endfor %}
     </div>

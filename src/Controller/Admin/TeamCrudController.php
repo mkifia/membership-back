@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Team;
@@ -8,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 use function Symfony\Component\Translation\t;
@@ -30,6 +33,7 @@ class TeamCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            IdField::new('id', 'ID')->hideOnForm(),
             TextField::new('name', t('Name')),
             TextField::new('number', t('Number')),
             CollectionField::new('members', t('Members'))
@@ -42,6 +46,7 @@ class TeamCrudController extends AbstractCrudController
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_EDIT, Action::INDEX)
-            ->setPermissions(['ROLE_ADMIN']);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::INDEX);
     }
 }

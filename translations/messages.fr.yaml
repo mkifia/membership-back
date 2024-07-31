@@ -1,3 +1,4 @@
+# path: translations/messages.fr.yaml
 Dashboard: Accueil
 Fee: Frais
 Team: Équipe
@@ -71,3 +72,4 @@ Payment Details: Détails de paiement
 for: pour
 Membership Admin: Administration des adhésions
 in: en
+Users at this address: Utilisateurs à cette adresse

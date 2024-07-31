@@ -27,7 +27,7 @@
         </div>
     </div>
     <hr>
-    <h3>Users at this address</h3>
+    <h3>{{ 'Users at this address'|trans }}</h3>
     <div class="row">
     {% for user in entity.instance.users %}
         <div class="col-md-6">
@@ -50,6 +50,7 @@
                     </div>
                 </div>
             </div>
+            <br>
         </div>
     {% endfor %}
     </div>
